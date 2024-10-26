@@ -11,7 +11,6 @@ export class OperationsService {
   constructor(
     @InjectRepository(Operation)
     private operationRepository: Repository<Operation>,
-
     @InjectRepository(Transport)
     private transportRepository: Repository<Transport>,
   ) {}
