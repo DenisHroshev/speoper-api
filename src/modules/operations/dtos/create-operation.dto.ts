@@ -31,7 +31,7 @@ export class CreateOperationDto {
   @IsPositive()
   longitude?: number;
 
-  @IsEnum({ enum: OperationTypesEnum })
+  @IsEnum(OperationTypesEnum)
   type: OperationTypesEnum;
 
   @IsOptional()

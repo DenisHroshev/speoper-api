@@ -40,7 +40,10 @@ export class OperationsService {
   }
 
   async getSingleOperation(id: number): Promise<Operation> {
-    const transport = await this.operationRepository.findOne({ where: { id } });
+    const transport = await this.operationRepository.findOne({
+      where: { id },
+      relations: { transports: true },
+    });
     if (!transport) {
       throw new NotFoundException(`Operation with ID ${id} not found`);
     }
@@ -66,7 +69,13 @@ export class OperationsService {
       preparedOperation,
     );
 
-    return this.operationRepository.save(updatedOperation);
+    if (preparedOperation.transports) {
+      updatedOperation.transports = preparedOperation.transports;
+    }
+
+    await this.operationRepository.save(updatedOperation);
+
+    return this.getSingleOperation(id);
   }
 
   async deleteOperation(id: number): Promise<void> {

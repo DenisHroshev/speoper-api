@@ -35,7 +35,7 @@ export class UpdateOperationDto {
   longitude?: number;
 
   @IsOptional()
-  @IsEnum({ enum: OperationTypesEnum })
+  @IsEnum(OperationTypesEnum)
   type: OperationTypesEnum;
 
   @IsOptional()

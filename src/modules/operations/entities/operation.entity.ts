@@ -7,6 +7,7 @@ import {
 } from 'typeorm';
 import { OperationTypesEnum } from '../constants/operation-types.enum';
 import { Transport } from '../../transports/entitites/transport.entity';
+import { OperationStatusesEnum } from '../constants/operation-statuses.enum';
 
 @Entity('operations')
 export class Operation {
@@ -22,14 +23,17 @@ export class Operation {
   @Column()
   date: Date;
 
-  @Column({ type: 'decimal' })
+  @Column({ type: 'decimal', nullable: true })
   latitude: number;
 
-  @Column({ type: 'decimal' })
+  @Column({ type: 'decimal', nullable: true })
   longitude: number;
 
   @Column({ enum: OperationTypesEnum })
   type: OperationTypesEnum;
+
+  @Column({ enum: OperationStatusesEnum })
+  status: OperationStatusesEnum;
 
   @Column({ nullable: true })
   photoUrl: string;
