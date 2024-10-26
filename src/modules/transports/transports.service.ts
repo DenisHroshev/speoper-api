@@ -39,6 +39,7 @@ export class TransportsService {
       transport,
       updateTransportDto,
     );
+
     return this.transportRepository.save(updatedTransport);
   }
 

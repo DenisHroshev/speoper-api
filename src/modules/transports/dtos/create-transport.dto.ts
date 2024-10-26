@@ -1,12 +1,12 @@
 import { TransportTypes } from '../constants/transport-types.enum';
 import {
   IsEnum,
-  IsInt,
   IsNumber,
   IsOptional,
   IsPositive,
   IsString,
 } from 'class-validator';
+import { Transform } from 'class-transformer';
 
 export class CreateTransportDto {
   @IsString()
@@ -15,6 +15,7 @@ export class CreateTransportDto {
   @IsString()
   description: string;
 
+  @Transform(({ value }) => Number(value))
   @IsNumber()
   @IsPositive()
   peopleCapacity: number;

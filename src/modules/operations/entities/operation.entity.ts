@@ -1,5 +1,12 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { OperationTypesEnum } from '../constants/operation-types.enum';
+import { Transport } from '../../transports/entitites/transport.entity';
 
 @Entity('operations')
 export class Operation {
@@ -26,4 +33,8 @@ export class Operation {
 
   @Column({ nullable: true })
   photoUrl: string;
+
+  @ManyToMany(() => Transport)
+  @JoinTable()
+  transports: Transport[];
 }
