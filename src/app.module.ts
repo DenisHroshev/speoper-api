@@ -9,7 +9,7 @@ import { AiModule } from './modules/ai/ai.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: 'speoper-1.cfkmusugc9kv.eu-north-1.rds.amazonaws.com',

@@ -7,12 +7,14 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { OperationsService } from './operations.service';
 import { CreateOperationDto } from './dtos/create-operation.dto';
 import { UpdateOperationDto } from './dtos/update-operation.dto';
 import { AuthGuard } from '../auth/guards/auth.guard';
+import { FillWithAiDto } from './dtos/fill-with-ai.dto';
 
 @Controller('operations')
 export class OperationsController {
@@ -22,6 +24,12 @@ export class OperationsController {
   @Get()
   getAllOperations() {
     return this.operationsService.getAllOperations();
+  }
+
+  @UseGuards(AuthGuard)
+  @Get('fill-with-ai')
+  fillWithAi(@Query() { prompt }: FillWithAiDto) {
+    return this.operationsService.fillWithAi(prompt);
   }
 
   @UseGuards(AuthGuard)
