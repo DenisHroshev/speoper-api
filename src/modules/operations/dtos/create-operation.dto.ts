@@ -1,44 +1,38 @@
 import {
   IsDateString,
-  IsEnum,
+  IsNotEmpty,
   IsNumber,
   IsOptional,
-  IsPositive,
   IsString,
 } from 'class-validator';
-import { Transform } from 'class-transformer';
-import { OperationTypesEnum } from '../constants/operation-types.enum';
 
 export class CreateOperationDto {
   @IsString()
+  @IsNotEmpty()
   name: string;
 
   @IsString()
+  @IsNotEmpty()
   description: string;
 
   @IsDateString()
-  date: Date;
+  @IsNotEmpty()
+  date: string;
 
-  @IsOptional()
-  @Transform(({ value }) => Number(value))
   @IsNumber()
-  @IsPositive()
+  @IsOptional()
   latitude?: number;
 
-  @IsOptional()
-  @Transform(({ value }) => Number(value))
   @IsNumber()
-  @IsPositive()
+  @IsOptional()
   longitude?: number;
 
-  @IsEnum(OperationTypesEnum)
-  type: OperationTypesEnum;
+  // @IsNumber()
+  // @IsNotEmpty()
+
+  // typeId: number; // ID типу операції
 
   @IsOptional()
   @IsString()
   photoUrl?: string;
-
-  @IsOptional()
-  @IsNumber({}, { each: true })
-  transports: number[];
 }

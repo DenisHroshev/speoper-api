@@ -1,27 +1,21 @@
-import { TransportTypes } from '../constants/transport-types.enum';
-import {
-  IsEnum,
-  IsNumber,
-  IsOptional,
-  IsPositive,
-  IsString,
-} from 'class-validator';
-import { Transform } from 'class-transformer';
+import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class CreateTransportDto {
   @IsString()
+  @IsNotEmpty()
   name: string;
 
   @IsString()
+  @IsNotEmpty()
   description: string;
 
-  @Transform(({ value }) => Number(value))
   @IsNumber()
-  @IsPositive()
+  @IsNotEmpty()
   peopleCapacity: number;
 
-  @IsEnum(TransportTypes)
-  type: TransportTypes;
+  // @IsNumber()
+  // @IsNotEmpty()
+  // typeId: number; // ID типу транспорту
 
   @IsOptional()
   @IsString()

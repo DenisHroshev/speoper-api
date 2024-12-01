@@ -5,7 +5,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { OperationsModule } from './modules/operations/operations.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { TransportsModule } from './modules/transports/transports.module';
-import { AiModule } from './modules/ai/ai.module';
 
 @Module({
   imports: [
@@ -18,7 +17,6 @@ import { AiModule } from './modules/ai/ai.module';
       password: 'k738D4NTyapGSX7MCzeC',
       database: 'speoper-db1',
       entities: ['../**/*.entity.{js, ts}'],
-      // autoLoadEntities: true,
       synchronize: true,
       ssl: { rejectUnauthorized: false },
       logging: true,
@@ -26,7 +24,6 @@ import { AiModule } from './modules/ai/ai.module';
     OperationsModule,
     AuthModule,
     TransportsModule,
-    AiModule,
   ],
   providers: [],
 })
