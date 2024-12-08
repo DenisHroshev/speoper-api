@@ -18,6 +18,6 @@ export class Transport {
   @Column({ enum: TransportTypes })
   type: TransportTypes;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, type: 'text' })
   photoUrl: string;
 }

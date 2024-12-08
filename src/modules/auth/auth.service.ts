@@ -32,7 +32,10 @@ export class AuthService {
   }
 
   private async returnToken(userData: { userId: number; role: Role }) {
-    return { accessToken: await this.createAccessToken(userData) };
+    return {
+      accessToken: await this.createAccessToken(userData),
+      isDispatcher: userData.role === Role.DISPATCHER,
+    };
   }
 
   async login(body: UserCredentialsRequestDto) {
@@ -66,8 +69,19 @@ export class AuthService {
     const newUser = await this.userRepository.save({
       email: body.email,
       passwordHash,
+      serviceType: body.serviceType,
     });
 
     return this.returnToken({ userId: newUser.id, role: newUser.role });
+  }
+
+  async getUserByIdOrThrow(id: number) {
+    const user = await this.userRepository.findOneBy({ id });
+
+    if (!user) {
+      throw new BadRequestException('User is not found.');
+    }
+
+    return user;
   }
 }

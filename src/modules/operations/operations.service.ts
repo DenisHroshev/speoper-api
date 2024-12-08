@@ -10,6 +10,9 @@ import { z } from 'zod';
 import { OperationTypesEnum } from './constants/operation-types.enum';
 import { zodResponseFormat } from 'openai/helpers/zod';
 import { ConfigService } from '@nestjs/config';
+import { ITokenUser } from '../auth/types/token-user.type';
+import { Role } from '../auth/constants/roles.enum';
+import { AuthService } from '../auth/auth.service';
 
 @Injectable()
 export class OperationsService {
@@ -18,6 +21,7 @@ export class OperationsService {
     private operationRepository: Repository<Operation>,
     @InjectRepository(Transport)
     private transportRepository: Repository<Transport>,
+    private authService: AuthService,
     private configService: ConfigService,
   ) {}
 
@@ -40,8 +44,25 @@ export class OperationsService {
     return preparedOperation;
   }
 
-  async getAllOperations(): Promise<Operation[]> {
-    return await this.operationRepository.find();
+  async getAllOperations(tokenUser: ITokenUser): Promise<Operation[]> {
+    if (tokenUser.role === Role.DISPATCHER) {
+      return this.operationRepository.find();
+    }
+
+    const user = await this.authService.getUserByIdOrThrow(tokenUser.id);
+
+    if (!user.serviceType) {
+      return this.operationRepository.find();
+    }
+
+    return this.operationRepository.find({
+      where: {
+        transports: {
+          type: user.serviceType,
+        },
+      },
+      relations: ['transports'],
+    });
   }
 
   async getSingleOperation(id: number): Promise<Operation> {

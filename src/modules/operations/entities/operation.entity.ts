@@ -35,7 +35,7 @@ export class Operation {
   @Column({ enum: OperationStatusesEnum })
   status: OperationStatusesEnum;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, type: 'text' })
   photoUrl: string;
 
   @ManyToMany(() => Transport)
