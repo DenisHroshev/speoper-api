@@ -15,6 +15,9 @@ import { CreateOperationDto } from './dtos/create-operation.dto';
 import { UpdateOperationDto } from './dtos/update-operation.dto';
 import { AuthGuard } from '../auth/guards/auth.guard';
 import { FillWithAiDto } from './dtos/fill-with-ai.dto';
+import { Role } from '../auth/constants/roles.enum';
+import { Roles } from '../auth/decorators/roles.decorator';
+import { RolesGuard } from '../auth/guards/roles.guard';
 
 @Controller('operations')
 export class OperationsController {
@@ -26,7 +29,8 @@ export class OperationsController {
     return this.operationsService.getAllOperations();
   }
 
-  @UseGuards(AuthGuard)
+  @Roles(Role.DISPATCHER)
+  @UseGuards(AuthGuard, RolesGuard)
   @Get('fill-with-ai')
   fillWithAi(@Query() { prompt }: FillWithAiDto) {
     return this.operationsService.fillWithAi(prompt);
@@ -38,13 +42,15 @@ export class OperationsController {
     return this.operationsService.getSingleOperation(id);
   }
 
-  @UseGuards(AuthGuard)
+  @Roles(Role.DISPATCHER)
+  @UseGuards(AuthGuard, RolesGuard)
   @Post()
   addOperation(@Body() createOperationDto: CreateOperationDto) {
     return this.operationsService.addOperation(createOperationDto);
   }
 
-  @UseGuards(AuthGuard)
+  @Roles(Role.DISPATCHER)
+  @UseGuards(AuthGuard, RolesGuard)
   @Patch(':id')
   modifyOperation(
     @Param('id', ParseIntPipe) id: number,
@@ -53,7 +59,8 @@ export class OperationsController {
     return this.operationsService.modifyOperation(id, updateOperationDto);
   }
 
-  @UseGuards(AuthGuard)
+  @Roles(Role.DISPATCHER)
+  @UseGuards(AuthGuard, RolesGuard)
   @Delete(':id')
   deleteOperation(@Param('id', ParseIntPipe) id: number) {
     return this.operationsService.deleteOperation(id);

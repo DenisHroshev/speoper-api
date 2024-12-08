@@ -14,6 +14,8 @@ import { TransportsService } from './transports.service';
 import { CreateTransportDto } from './dtos/create-transport.dto';
 import { UpdateTransportDto } from './dtos/update-transport.dto';
 import { AuthGuard } from '../auth/guards/auth.guard';
+import { Roles } from '../auth/decorators/roles.decorator';
+import { Role } from '../auth/constants/roles.enum';
 
 @Controller('transports')
 export class TransportsController {
@@ -32,12 +34,14 @@ export class TransportsController {
   }
 
   @UseGuards(AuthGuard)
+  @Roles(Role.DISPATCHER)
   @Post()
   addTransport(@Body() createTransportDto: CreateTransportDto) {
     return this.transportsService.addTransport(createTransportDto);
   }
 
   @UseGuards(AuthGuard)
+  @Roles(Role.DISPATCHER)
   @Patch(':id')
   modifyTransport(
     @Param('id', ParseIntPipe) id: number,
@@ -47,6 +51,7 @@ export class TransportsController {
   }
 
   @UseGuards(AuthGuard)
+  @Roles(Role.DISPATCHER)
   @Delete(':id')
   deleteTransport(@Param('id', ParseIntPipe) id: number) {
     return this.transportsService.deleteTransport(id);

@@ -6,6 +6,7 @@ import { UserCredentialsRequestDto } from './dtos/user-credentials-request.dto';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { JwtConstants } from './constants/jwt.constants';
+import { Role } from './constants/roles.enum';
 
 @Injectable()
 export class AuthService {
@@ -23,15 +24,15 @@ export class AuthService {
     return bcrypt.hash(data, 10);
   }
 
-  private createAccessToken(userId: number) {
+  private createAccessToken({ userId, role }: { userId: number; role: Role }) {
     return this.jwtService.signAsync(
-      { id: userId },
+      { id: userId, role },
       { expiresIn: '2d', secret: JwtConstants.JWT_SECRET },
     );
   }
 
-  private async returnToken(userId: number) {
-    return { accessToken: await this.createAccessToken(userId) };
+  private async returnToken(userData: { userId: number; role: Role }) {
+    return { accessToken: await this.createAccessToken(userData) };
   }
 
   async login(body: UserCredentialsRequestDto) {
@@ -50,7 +51,7 @@ export class AuthService {
       throw new BadRequestException('Incorrect password.');
     }
 
-    return this.returnToken(user.id);
+    return this.returnToken({ userId: user.id, role: user.role });
   }
 
   async registration(body: UserCredentialsRequestDto) {
@@ -67,6 +68,6 @@ export class AuthService {
       passwordHash,
     });
 
-    return this.returnToken(newUser.id);
+    return this.returnToken({ userId: newUser.id, role: newUser.role });
   }
 }
